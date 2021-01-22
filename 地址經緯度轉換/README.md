@@ -6,3 +6,6 @@
 此處有附上我包裝的執行檔，有需要測試的朋友可以試試看。
 
 ## 操作說明
+1. 請先確認你的Chrome瀏覽器版本，之後再到以下連結抓取相對應版的驅動程式(此為google官方程式，請放心下載)
+   Chrome Driver : <https://chromedriver.chromium.org/downloads>
+2. 下載完畢後驅動程式(chromedriver.exe)跟我提供的程式執行放在同一個目錄下，即可開始使用。
