@@ -1,8 +1,8 @@
 # 將台灣郵政地址轉換成英文
 ## 一、需安裝套件
 * 需要安裝的Python外部套件
-  * selenium pip install selenium
-  * pandas pip install pandas
+  * selenium pip install selenium
+  * pandas pip install pandas
   * chromedriver.exe (Selenium需要用到)
 ## 二、核心概念
 * 程式行為
@@ -18,8 +18,4 @@
   * 用來設定CSV的欄位標題。
 * To_csv(city)
  * 用來產出CSV檔，city為檔明(意即縣市)。
-## 四、 輸出結果
-
-![GITHUB]( https://imgur.com/a/okw6APz "address")
- 
 
