@@ -1,0 +1,21 @@
+[2019-02-19 17:56:36] 南投圖書館資料
+[2019-02-19 17:56:37] Download URL : http://www4.yunlin.gov.tw/uploaddowndoc?file=/pubyunlin/bulletin/%E9%9B%B2%E6%9E%97%E7%B8%A3%E5%90%84%E5%9C%96%E6%9B%B8%E9%A4%A8%E5%9C%B0%E5%9D%80%E9%9B%BB%E8%A9%B1%E8%A1%A8.docx&flag=doc
+[2019-02-19 17:56:37] ErrMsg :　
+Traceback (most recent call last):
+  File ".\APOPND_Yunlin_Lib.py", line 68, in APOPND_Yunlin_Library_crawler
+    data = pd.read_csv('data/csv/' + Filename)
+  File "C:\Users\user\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 678, in parser_f
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\user\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 446, in _read
+    data = parser.read(nrows)
+  File "C:\Users\user\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 1036, in read
+    ret = self._engine.read(nrows)
+  File "C:\Users\user\Anaconda3\lib\site-packages\pandas\io\parsers.py", line 1848, in read
+    data = self._reader.read(nrows)
+  File "pandas\_libs\parsers.pyx", line 876, in pandas._libs.parsers.TextReader.read
+  File "pandas\_libs\parsers.pyx", line 891, in pandas._libs.parsers.TextReader._read_low_memory
+  File "pandas\_libs\parsers.pyx", line 945, in pandas._libs.parsers.TextReader._read_rows
+  File "pandas\_libs\parsers.pyx", line 932, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "pandas\_libs\parsers.pyx", line 2112, in pandas._libs.parsers.raise_parser_error
+pandas.errors.ParserError: Error tokenizing data. C error: Expected 2 fields in line 11, saw 3
+
