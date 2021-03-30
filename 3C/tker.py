@@ -73,7 +73,7 @@ class Application(tk.Frame):
         self.text2.delete('1.0', END)
         # # 用關鍵字去查詢新聞網
         if self.variable.get() == '蘋果日報':
-            newlist = getAppleNewsList(self.entry.get(), self.page, self.index)  # 取得新聞資訊(連結、標題、index、page)
+            newlist = getAppleNewsList(self.entry.get())  # 取得新聞資訊(連結、標題、index、page)
             if newlist == '0':
                 messagebox.showwarning('提示', '此關鍵字可能搜尋不到結果，或是程式異常!')
                 return
@@ -352,75 +352,19 @@ class Application(tk.Frame):
         labelStyle = tkFont.Font(family="Lucida Grande", size=20)
         ButtonStyle = tkFont.Font(family="Lucida Grande", size=10)
 
-        # 關鍵字欄位
-        self.label = tk.Label(self, font=labelStyle)
-        self.label["text"] = "搜尋關鍵字"
-        self.label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=20)
-
-        self.entry = tk.Entry(self, font=labelStyle, highlightthickness=1)
-        self.entry.config(highlightbackground = "gray", highlightcolor= "gray")
-        self.entry.grid(row=0, column=1, sticky=tk.W, ipadx=150, ipady=2, pady=20)
-  
-        # 新聞清單
-        self.label = tk.Label(self, font=labelStyle)
-        self.label["text"] = "選擇新聞網"
-        self.label.grid(row=0, column=2, sticky=tk.W, padx=20, pady=20)
-
-        self.variable = tk.StringVar(self)
-        self.variable.set(self.NewsDropDwonMenu[0])
-        self.variable.trace('w', self.callback)
-        self.NewsOpt = tk.OptionMenu(self, self.variable, *self.NewsDropDwonMenu)
-        self.NewsOpt.config(font=ButtonStyle, highlightthickness=1, highlightbackground='gray', highlightcolor='gray')
-        self.NewsOpt.grid(row=0, column=3, sticky=tk.W, padx=0, pady=20, ipadx=15, ipady=10)
-
-        # 爬文按鈕
-        self.button = tk.Button(self, font=ButtonStyle, command=self.getNews)
-        self.button.config(fg='#613030', bg='#F0F0F0')
-        self.button["text"] = "抓取新聞"
-        self.button.grid(row=0, column=4, sticky=tk.W, padx=30, pady=20, ipadx=30, ipady=10)
-
-        # 新聞標題
-        self.label2 = tk.Label(self, font=labelStyle)
-        self.label2["text"] = "新聞標題"
-        self.label2.grid(row=1, column=0, sticky=tk.E, pady=20)
-
-        self.text=tk.Text(self, font=ButtonStyle, height=1, width=70, highlightthickness=1)
-        self.text.config(font=labelStyle, highlightbackground = "gray", highlightcolor= "gray")
-        self.text.grid(row=1, column=1, columnspan=4, ipadx=10, ipady=1)
-
-        # 新聞內容
-        self.label3 = tk.Label(self, font=labelStyle)
-        self.label3["text"] = "新聞內容"
-        self.label3.grid(row=2, column=0, columnspan=2, sticky=tk.W, padx=70, pady=100)
-
-        self.text2=tk.Text(self, font=ButtonStyle, height=10, width=60, highlightthickness=1)
-        self.text2.config(font=labelStyle, highlightbackground = "gray", highlightcolor= "gray")
-        self.text2.grid(row=2, column=1, rowspan=2, columnspan=4, pady=20, ipadx=5, ipady=20)
-
-        self.button2 = tk.Button(self, font=ButtonStyle, command=self.getPreNews)
-        self.button2["text"] = "上一篇"
-        self.button2['state'] = tk.DISABLED
-        self.button2.grid(row=3, column=0, sticky=tk.W, padx=30, ipadx=15, ipady=10)
-
-        self.button3 = tk.Button(self, font=ButtonStyle, command=self.getNextNews)
-        self.button3["text"] = "下一篇"
-        self.button3['state'] = tk.DISABLED
-        self.button3.grid(row=3, column=1, sticky=tk.W, ipadx=15, ipady=10)
-
-        # 帳密管理
-        self.label4 = tk.Label(self, font=labelStyle)
-        self.label4["text"] = "帳密管理"
-        self.label4.grid(row=4, column=0, columnspan=2, rowspan=3, sticky=tk.W, padx=70, pady=100)
-
+        # ----------------表格--------------------
         self.tree=ttk.Treeview(self, show='headings', selectmode = 'browse') # 表格
-        self.tree['columns']=('帳號', '密碼', '版型')
-        self.tree.column('帳號', width=125, anchor=tk.CENTER)   # 表示列,不顯示
+        self.tree['columns']=('專案', '帳號', '密碼', '狀態')
+        # 表示列,不顯示
+        self.tree.column('專案', width=125, anchor=tk.CENTER)
+        self.tree.column('帳號', width=125, anchor=tk.CENTER)   
         self.tree.column('密碼', width=125, anchor=tk.CENTER)
-        self.tree.column('版型', width=125, anchor=tk.CENTER)
-
-        self.tree.heading('帳號', text='帳號')  # 顯示表頭
+        self.tree.column('狀態', width=125, anchor=tk.CENTER)
+        # 顯示表頭
+        self.tree.heading('專案', text='專案')  
+        self.tree.heading('帳號', text='帳號')
         self.tree.heading('密碼', text='密碼')
-        self.tree.heading('版型', text='版型')
+        self.tree.heading('狀態', text='狀態')
 
         # 開啟帳密文件
         with open('account.txt', 'r', encoding='utf-8') as f:
@@ -430,39 +374,69 @@ class Application(tk.Frame):
         self.AccountList = self.ExtendList(self.AccountList) # 將index加入AccountList
         # 將table組出來
         for lst in self.AccountList[::-1]:
-            self.tree.insert('', int(lst[-1]), text=lst[-1], values=(lst[0], lst[1], lst[2])) # 插入資料
-        self.tree.grid(row=4, column=1, columnspan=2, rowspan=3, sticky=tk.W, padx=127)
+            self.tree.insert('', int(lst[-1]), values=(lst[0], lst[1], lst[2], lst[3])) # 插入資料
+        self.tree.grid(row=0, column=0, sticky=tk.W, padx=10, pady=10, ipady=150)
         self.tree.bind('<<TreeviewSelect>>', self.SelectAccountTable)
 
-        # 編輯按鈕
-        self.button4 = tk.Button(self, font=ButtonStyle, command=self.EditAccountFrame)
-        self.button4.config(fg='#613030', bg='#F0F0F0')
-        self.button4["text"] = "編輯選擇帳密"
-        self.button4['state'] = tk.DISABLED # 關閉按鈕
-        self.button4.grid(row=4, column=2, sticky=tk.W, ipadx=30, ipady=10)
+        # ----------------明細&修改--------------------
+        self.LabelFrame = tk.LabelFrame(self, text='內容修改', font=ButtonStyle)
+        self.LabelFrame.config(font=labelStyle)
+        self.LabelFrame.grid(row=0, column=3, columnspan=5, rowspan=5, padx=20, pady=0, ipadx=5, ipady=100)
 
-        # 新增按鈕
-        self.button7 = tk.Button(self, font=ButtonStyle, command=self.AddAccountFrame)
-        self.button7.config(fg='#613030', bg='#F0F0F0')
-        self.button7["text"] = "新增帳號密碼"
-        self.button7.grid(row=5, column=2, sticky=tk.W, ipadx=30, ipady=10, pady=0)
+        # 專案
+        self.label = tk.Label(self.LabelFrame, font=labelStyle, bg="#66B3FF")
+        self.label["text"] = "專案(title)"
+        self.label.grid(row=0, column=0,  padx=10, pady=5)
 
-                # 新增按鈕
-        self.button8 = tk.Button(self, font=ButtonStyle, command=self.DeleteAccountFrame)
-        self.button8.config(fg='#613030', bg='#F0F0F0')
-        self.button8["text"] = "刪除選擇帳密"
-        self.button8['state'] = tk.DISABLED # 關閉按鈕
-        self.button8.grid(row=6, column=2, sticky=tk.W, ipadx=30, ipady=10, pady=0)
+        self.entry = tk.Entry(self.LabelFrame, font=labelStyle)
+        self.entry.grid(row=0, column=1,  padx=10, pady=5, ipadx=100)
 
-        # 發文
-        self.button6 = tk.Button(self, font=ButtonStyle, command=self.PostNews)
-        self.button6.config(fg='#613030', bg='#F0F0F0')
-        self.button6["text"] = "使用此帳密發文"
-        self.button6['state'] = tk.DISABLED # 關閉按鈕
-        self.button6.grid(row=4, column=3, rowspan=3, sticky=tk.W, ipadx=20, ipady=10)
+        # 搜尋用關鍵字
+        self.label2 = tk.Label(self.LabelFrame, font=labelStyle, bg="#66B3FF")
+        self.label2["text"] = "搜尋用關鍵字"
+        self.label2.grid(row=1, column=0,  padx=10)
+
+        self.text=tk.Text(self.LabelFrame, font=ButtonStyle, height=3, width=35)
+        self.text.config(font=labelStyle)
+        self.text.grid(row=1, column=1, rowspan=2, pady=20, ipadx=5, ipady=10)
+
+        # description
+        self.label3 = tk.Label(self.LabelFrame, font=labelStyle, bg="#66B3FF")
+        self.label3["text"] = "description"
+        self.label3.grid(row=3, column=0, padx=10)
+
+        self.text2=tk.Text(self.LabelFrame, font=ButtonStyle, height=5, width=35)
+        self.text2.config(font=labelStyle)
+        self.text2.grid(row=3, column=1, rowspan=2, pady=5, ipadx=5, ipady=10)
+
+        # keywords
+        self.label4 = tk.Label(self.LabelFrame, font=labelStyle, bg="#66B3FF")
+        self.label4["text"] = "keywords"
+        self.label4.grid(row=5, column=0, padx=10)
+
+        self.text3=tk.Text(self.LabelFrame, font=ButtonStyle, height=3, width=35)
+        self.text3.config(font=labelStyle)
+        self.text3.grid(row=5, column=1, rowspan=2, pady=5, ipadx=5, ipady=5)
+
+        # 插入文字
+        self.label4 = tk.Label(self.LabelFrame, font=labelStyle, bg="#66B3FF")
+        self.label4["text"] = "插入文字"
+        self.label4.grid(row=7, column=0, padx=10)
+
+        self.text3=tk.Text(self.LabelFrame, font=ButtonStyle, height=3, width=35)
+        self.text3.config(font=labelStyle)
+        self.text3.grid(row=7, column=1, rowspan=2, pady=5, ipadx=5, ipady=5)
+
+        # 狀態
+        self.label4 = tk.Label(self.LabelFrame, font=labelStyle, bg="#66B3FF")
+        self.label4["text"] = "狀態"
+        self.label4.grid(row=9, column=0, padx=10)
+ 
+
+
 
 root = tk.Tk()
-root.geometry('1200x800')
+root.geometry('1300x800')
 app = Application(root)
 root.resizable(0, 0)
 root.mainloop()
