@@ -1,4 +1,0 @@
-如果出現chrome版本不符的問題，請使用以下解決方式，
-1. 打開chrome，點擊右上工具列，選擇「說明」->「關於Chrome」，確認自己目前chrome版本
-2. https://chromedriver.chromium.org/downloads 到這個網址，下載對應的chrome driver版本(下載win32.zip)
-3. 下載完畢後解壓縮，將chromedriver.exe取代掉程式目錄中原來的chromedriver.exe即可。
